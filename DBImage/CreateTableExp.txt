@@ -1,0 +1,6 @@
+예시)
+CREATE TABLE phpMakeTable
+(
+stdName VARCHAR(10) NOT NULL PRIMARY KEY,
+ addr CHAR(4) NOT NULL
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci
