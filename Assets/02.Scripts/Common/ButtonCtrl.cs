@@ -7,16 +7,20 @@ public class ButtonCtrl : MonoBehaviour
 {
     public void OnGameReadyButtonClick()
     {
-        //    GameObject _lobby = transform.Find("LobbyPanel").gameObject;
-        //    _lobby.SetActive(true);
-        GameObject _mainButton = transform.Find("ButtonPanel").gameObject;
-        _mainButton.SetActive(false);
+        // 멀티 용 코드
+        SceneManager.LoadScene("LobbyScene");
 
-        // 플레이어 닉네임 입력하는 창
-        // 나중에는 아이디 비밀번호를 입력하고
-        // 닉네임을 받아와서 닉네임을 자동 입력하는 방식으로 처리.
-        GameObject _login = transform.Find("LoginPanel").gameObject;
-        _login.SetActive(true);
+        // 솔로용 코드
+        //    GameObject _lobby = transform.Find("LobbyPanel").gameObject;
+        ////    _lobby.SetActive(true);
+        //GameObject _mainButton = transform.Find("ButtonPanel").gameObject;
+        //_mainButton.SetActive(false);
+
+        //// 플레이어 닉네임 입력하는 창
+        //// 나중에는 아이디 비밀번호를 입력하고
+        //// 닉네임을 받아와서 닉네임을 자동 입력하는 방식으로 처리.
+        //GameObject _login = transform.Find("LoginPanel").gameObject;
+        //_login.SetActive(true);
 
     }
 
@@ -25,6 +29,7 @@ public class ButtonCtrl : MonoBehaviour
     {
 
         // 로딩
+        // 로딩 씬 아직 없음.
         StartCoroutine(GameSceneLoad());
 
 
@@ -44,6 +49,9 @@ public class ButtonCtrl : MonoBehaviour
 
 
         //Game Manager Game Start
+        // 자신이 몇 번째로 접속했는지 확인할 수 있나?
+        // 가능하면 몇 번째 패널에 자신의 데이터가 있는지 확인할 수 있다.
+
         GameManager.instance.GameStart(_operation,
             transform.Find("LobbyPanel").Find("PlayerListPanel").Find("PlayerInfoPanel_0").Find("PlayerNameText").GetComponent<UnityEngine.UI.Text>().text,
             transform.Find("LobbyPanel").Find("PlayerListPanel").Find("PlayerInfoPanel_0").Find("ClassDropdown").Find("Label").GetComponent<UnityEngine.UI.Text>().text);
@@ -60,11 +68,16 @@ public class ButtonCtrl : MonoBehaviour
 
     public void OnLobbyExitButtonClick()
     {
-        GameObject _lobby = transform.Find("LobbyPanel").gameObject;
-        _lobby.SetActive(false);
+        // 멀티 용 코드
+        SceneManager.LoadScene("MainMenuScene");
 
-        GameObject _mainButton = transform.Find("ButtonPanel").gameObject;
-        _mainButton.SetActive(true);
+
+        // 솔로 용 코드
+        //GameObject _lobby = transform.Find("LobbyPanel").gameObject;
+        //_lobby.SetActive(false);
+
+        //GameObject _mainButton = transform.Find("ButtonPanel").gameObject;
+        //_mainButton.SetActive(true);
     }
 
 
@@ -90,7 +103,6 @@ public class ButtonCtrl : MonoBehaviour
 
         GameObject _lobby = transform.Find("LobbyPanel").gameObject;
         _lobby.SetActive(true);
-
 
         int count = Photon.Pun.PhotonNetwork.CurrentRoom.PlayerCount;
 
