@@ -27,13 +27,25 @@ public class ButtonCtrl : MonoBehaviour
 
     public void OnGameStartButtonClick()
     {
+        PlayerPrefs.SetString("Player_NickName", transform.Find("LobbyPanel").Find("PlayerListPanel").Find("PlayerInfoPanel_0").Find("PlayerNameText").GetComponent<UnityEngine.UI.Text>().text);
+        PlayerPrefs.SetString("Player_Class", transform.Find("LobbyPanel").Find("PlayerListPanel").Find("PlayerInfoPanel_0").Find("ClassDropdown").Find("Label").GetComponent<UnityEngine.UI.Text>().text);
 
         // 로딩
+        // 멀티용
+        if (Photon.Pun.PhotonNetwork.IsMasterClient)
+        {
+            Photon.Pun.PhotonNetwork.LoadLevel("MapScene");
+        }
+        // 싱글용
+        //GameManager.instance.SceneLoadingFunction("MapScene");
+
         // 로딩 씬 아직 없음.
-        StartCoroutine(GameSceneLoad());
+        //StartCoroutine(GameSceneLoad());
 
 
     }
+
+
 
     IEnumerator GameSceneLoad()
     {
@@ -69,7 +81,12 @@ public class ButtonCtrl : MonoBehaviour
     public void OnLobbyExitButtonClick()
     {
         // 멀티 용 코드
-        SceneManager.LoadScene("MainMenuScene");
+        // 지금의 로비는 방이다.
+        Photon.Pun.PhotonNetwork.LeaveRoom();
+
+        //Photon.Pun.PhotonNetwork.LeaveLobby();
+        //SceneManager.LoadScene("MainMenuScene");
+
 
 
         // 솔로 용 코드
@@ -83,8 +100,8 @@ public class ButtonCtrl : MonoBehaviour
 
     public void OnLogInSelectButtonClick()
     {
-        //string _playerNickName = transform.Find("LoginPanel").Find("NickNameInputField").Find("Text").GetComponent<UnityEngine.UI.Text>().text;
-        string _playerNickName = Photon.Pun.PhotonNetwork.NickName;
+        string _playerNickName = transform.Find("LoginPanel").Find("NickNameInputField").Find("Text").GetComponent<UnityEngine.UI.Text>().text;
+        //string _playerNickName = Photon.Pun.PhotonNetwork.NickName;
 
         if (_playerNickName == "" || _playerNickName == null || _playerNickName.Substring(0, 1) == " ")
         {
@@ -97,6 +114,7 @@ public class ButtonCtrl : MonoBehaviour
         {
             transform.Find("LoginPanel").Find("NickNameErrorText").gameObject.SetActive(false);
         }
+
 
         GameObject _login = transform.Find("LoginPanel").gameObject;
         _login.SetActive(false);
@@ -117,11 +135,13 @@ public class ButtonCtrl : MonoBehaviour
 
     public void OnLogInExitButtonClick()
     {
-        GameObject _login = transform.Find("LoginPanel").gameObject;
-        _login.SetActive(false);
+        SceneManager.LoadScene("MainMenuScene");
 
-        GameObject _mainButton = transform.Find("ButtonPanel").gameObject;
-        _mainButton.SetActive(true);
+        //GameObject _login = transform.Find("LoginPanel").gameObject;
+        //_login.SetActive(false);
+
+        //GameObject _mainButton = transform.Find("ButtonPanel").gameObject;
+        //_mainButton.SetActive(true);
     }
 
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -270,6 +271,55 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
+
+    }
+
+
+
+    public void SceneLoadingFunction(string _sceneName)
+    {
+        StartCoroutine(SceneLoadingCoroutine(_sceneName));
+    }
+
+
+    private IEnumerator SceneLoadingCoroutine(string _sceneName)
+    {
+        AsyncOperation _loadingOperation = SceneManager.LoadSceneAsync("LoadingScene");
+
+        while (_loadingOperation.progress < 0.9f) { Debug.Log("loading"); yield return null; }
+        yield return new WaitForSeconds(0.5f);
+        UnityEngine.UI.Slider _slider = GameObject.Find("LoadingSlider").GetComponent<UnityEngine.UI.Slider>();
+
+        AsyncOperation _operation = SceneManager.LoadSceneAsync(_sceneName);
+        _operation.allowSceneActivation = false;
+
+        Debug.Log("___ Loading... ___");
+        while (_operation.progress < 0.9f)
+        {
+            _slider.value = (float)_operation.progress;
+            Debug.Log("Loading");
+            yield return null;
+        }
+        Debug.Log("____ Loading almost complete ____ ");
+        _slider.value = 0.9f;
+
+
+        //Game Manager Game Start
+        GameManager.instance.GameStart(_operation,
+            PlayerPrefs.GetString("Player_NickName"),
+            PlayerPrefs.GetString("Player_Class"));
+        // 이전에 쓰던 방식이 있어서 함수를 유지시켰지만
+        // GameStart 함수 내에서 PlayerPrefs를 통해서 받아도 된다.
+
+        int count = 0;
+        while (count < 10)
+        {
+            _slider.value += 1 / 100f;
+            count++;
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        _operation.allowSceneActivation = true;
 
     }
 

@@ -80,6 +80,19 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     }
 
+    public override void OnLeftRoom()
+    {
+        // 방을 나가면 로비를 나간다.
+        Photon.Pun.PhotonNetwork.LeaveLobby();
+
+    }
+
+    public override void OnLeftLobby()
+    {
+        // 로비를 나가면 메인 메뉴 씬으로 간다.
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenuScene");
+    }
+
 
 
 }
