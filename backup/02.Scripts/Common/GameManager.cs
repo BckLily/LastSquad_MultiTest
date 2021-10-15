@@ -289,6 +289,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         StartCoroutine(SceneLoadingCoroutine(_sceneName));
     }
 
+
     private IEnumerator SceneLoadingCoroutine(string _sceneName)
     {
         AsyncOperation _loadingOperation = SceneManager.LoadSceneAsync("LoadingScene");
@@ -310,19 +311,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("____ Loading almost complete ____ ");
         _slider.value = 0.9f;
 
-        if (_sceneName == "MapScene")
-        {
-            //Game Manager Game Start
-            GameManager.instance.GameStart(_operation,
-                PlayerPrefs.GetString("Player_NickName"),
-                PlayerPrefs.GetString("Player_Class"));
-            // 이전에 쓰던 방식이 있어서 함수를 유지시켰지만
-            // GameStart 함수 내에서 PlayerPrefs를 통해서 받아도 된다.
-        }
-        else if (_sceneName == "LobbyScene")
-        {
-            JoinRoom(_operation);
-        }
+
+        //Game Manager Game Start
+        GameManager.instance.GameStart(_operation,
+            PlayerPrefs.GetString("Player_NickName"),
+            PlayerPrefs.GetString("Player_Class"));
+        // 이전에 쓰던 방식이 있어서 함수를 유지시켰지만
+        // GameStart 함수 내에서 PlayerPrefs를 통해서 받아도 된다.
 
         int count = 0;
         while (count < 10)
@@ -336,32 +331,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
-
-
     #endregion
 
 
     #region Photon Function
-
-    public void Login()
-    {
-        SceneLoadingFunction("LobbyScene");
-        //StartCoroutine(JoinRoomCoroutine());
-    }
-
-    public void JoinRoom(AsyncOperation _operation)
-    {
-        StartCoroutine(JoinRoomCoroutine(_operation));
-    }
-
-    IEnumerator JoinRoomCoroutine(AsyncOperation _operation)
-    {
-        yield return _operation;
-
-        // 랜덤한 방에 입장
-        Photon.Pun.PhotonNetwork.JoinRandomRoom();
-    }
-
 
     public override void OnLeftRoom()
     {
@@ -376,14 +349,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenuScene");
     }
 
-    public override void OnCreatedRoom()
-    {
-        Debug.Log("방 생성 끝");
-        Debug.Log($"방 이름 {PhotonNetwork.CurrentRoom.Name}");
-        SetRoomInfo();
-    }
-
-
     // 플레이어가 접속하면
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
@@ -391,7 +356,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     // 플레이어가 접속하거나 접속이 끊기면 방을 새로 세팅해야 한다.
-    public void SetRoomInfo()
+    private void SetRoomInfo()
     {
 #if UNITY_EDITOR
         Debug.Log($"접속 유저 수: {PhotonNetwork.CurrentRoom.PlayerCount}");
@@ -416,6 +381,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             _nameText.GetComponent<UnityEngine.UI.Text>().text = player.Value.NickName;
             _panel.Find("ClassDropdown").gameObject.SetActive(true);
         }
+
+
+
 
 
     }

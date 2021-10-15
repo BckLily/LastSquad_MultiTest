@@ -44,6 +44,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         // 준비 버튼을 누르면 Lobby에 접속하고
         // 닉네임 선택을 하면 랜덤한 방을 찾아서 접속하는 것으로 코드 변경할 필요가 있음.
 
+
         // 랜덤한 방을 찾아서 접속 시도
         //PhotonNetwork.JoinRandomRoom();
     }
@@ -63,6 +64,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
 
 
+    public override void OnCreatedRoom()
+    {
+        Debug.Log("방 생성 끝");
+        Debug.Log($"방 이름 {PhotonNetwork.CurrentRoom.Name}");
+
+    }
 
     public override void OnJoinedRoom()
     {
@@ -75,9 +82,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             Debug.Log($"접속한 플레이어 이름: {player.Value.NickName}");
         }
 
-        GameManager.instance.SetRoomInfo();
-        //ButtonCtrl _button = transform.GetComponent<ButtonCtrl>();
-        //_button.PlayerSettingInRoom();
+        ButtonCtrl _button = transform.GetComponent<ButtonCtrl>();
+        _button.PlayerSettingInRoom();
+
     }
 
 

@@ -8,16 +8,7 @@ public class ButtonCtrl : MonoBehaviour
     public void OnGameReadyButtonClick()
     {
         // 멀티 용 코드
-        //SceneManager.LoadScene("LobbyScene");
-        //GameObject _lobby = transform.Find("LobbyPanel").gameObject;
-        //_lobby.SetActive(true);
-        GameObject _login = transform.Find("LoginPanel").gameObject;
-        _login.SetActive(true);
-        GameObject _mainButton = transform.Find("ButtonPanel").gameObject;
-        _mainButton.SetActive(false);
-
-        GetComponent<LobbyManager>().OnConnectPhotonServer();
-
+        SceneManager.LoadScene("LobbyScene");
 
         // 솔로용 코드
         //    GameObject _lobby = transform.Find("LobbyPanel").gameObject;
@@ -36,7 +27,6 @@ public class ButtonCtrl : MonoBehaviour
 
     public void OnGameStartButtonClick()
     {
-        // 닉네임이랑 클래스 저장하는 것도 다르게 해야한다.
         PlayerPrefs.SetString("Player_NickName", transform.Find("LobbyPanel").Find("PlayerListPanel").Find("PlayerInfoPanel_0").Find("PlayerNameText").GetComponent<UnityEngine.UI.Text>().text);
         PlayerPrefs.SetString("Player_Class", transform.Find("LobbyPanel").Find("PlayerListPanel").Find("PlayerInfoPanel_0").Find("ClassDropdown").Find("Label").GetComponent<UnityEngine.UI.Text>().text);
 
@@ -93,8 +83,9 @@ public class ButtonCtrl : MonoBehaviour
         // 멀티 용 코드
         // 지금의 로비는 방이다.
         Photon.Pun.PhotonNetwork.LeaveRoom();
-        Photon.Pun.PhotonNetwork.LeaveLobby();
-        SceneManager.LoadScene("MainMenuScene");
+
+        //Photon.Pun.PhotonNetwork.LeaveLobby();
+        //SceneManager.LoadScene("MainMenuScene");
 
 
 
@@ -124,63 +115,6 @@ public class ButtonCtrl : MonoBehaviour
             transform.Find("LoginPanel").Find("NickNameErrorText").gameObject.SetActive(false);
         }
 
-        PlayerPrefs.SetString("Player_NickName", _playerNickName);
-        Photon.Pun.PhotonNetwork.NickName = PlayerPrefs.GetString("Player_NickName");
-
-        GameManager.instance.Login();
-        //// 랜덤한 방에 입장
-        //Photon.Pun.PhotonNetwork.JoinRandomRoom();
-
-
-        #region 싱글 용
-        //string _playerNickName = transform.Find("LoginPanel").Find("NickNameInputField").Find("Text").GetComponent<UnityEngine.UI.Text>().text;
-        ////string _playerNickName = Photon.Pun.PhotonNetwork.NickName;
-
-        //if (_playerNickName == "" || _playerNickName == null || _playerNickName.Substring(0, 1) == " ")
-        //{
-        //    transform.Find("LoginPanel").Find("NickNameErrorText").gameObject.SetActive(true);
-        //    return;
-        //}
-
-        //// 닉네임 입력 에러가 발생했었을 경우 비활성화.
-        //if (transform.Find("LoginPanel").Find("NickNameErrorText").gameObject.activeSelf)
-        //{
-        //    transform.Find("LoginPanel").Find("NickNameErrorText").gameObject.SetActive(false);
-        //}
-
-        //GameObject _login = transform.Find("LoginPanel").gameObject;
-        //_login.SetActive(false);
-
-        //GameObject _lobby = transform.Find("LobbyPanel").gameObject;
-        //_lobby.SetActive(true);
-
-        //int count = Photon.Pun.PhotonNetwork.CurrentRoom.PlayerCount;
-
-        //// 플레이어가 여러명이면 PlayerInfoPanel의 번호가 달라진다.
-        //Transform _panel = transform.Find("LobbyPanel").Find("PlayerListPanel").Find($"PlayerInfoPanel_{count - 1}");
-        //_panel.Find("PlayerNameText").gameObject.SetActive(true);
-        //_panel.Find("ClassDropdown").gameObject.SetActive(true);
-        //_panel.Find("PlayerNameText").GetComponent<UnityEngine.UI.Text>().text = _playerNickName; 
-        #endregion
-
-    }
-
-    public void PlayerSettingInRoom()
-    {
-        //string _playerNickName = transform.Find("LoginPanel").Find("NickNameInputField").Find("Text").GetComponent<UnityEngine.UI.Text>().text;
-        ////string _playerNickName = Photon.Pun.PhotonNetwork.NickName;
-
-        //if (_playerNickName == "" || _playerNickName == null || _playerNickName.Substring(0, 1) == " ")
-        //{
-        //    transform.Find("LoginPanel").Find("NickNameErrorText").gameObject.SetActive(true);
-        //    return;
-        //}
-
-        //// 닉네임 입력 에러가 발생했었을 경우 비활성화.
-        //if (transform.Find("LoginPanel").Find("NickNameErrorText").gameObject.activeSelf)
-        //{
-        //    transform.Find("LoginPanel").Find("NickNameErrorText").gameObject.SetActive(false);
-        //}
 
         GameObject _login = transform.Find("LoginPanel").gameObject;
         _login.SetActive(false);
@@ -194,9 +128,10 @@ public class ButtonCtrl : MonoBehaviour
         Transform _panel = transform.Find("LobbyPanel").Find("PlayerListPanel").Find($"PlayerInfoPanel_{count - 1}");
         _panel.Find("PlayerNameText").gameObject.SetActive(true);
         _panel.Find("ClassDropdown").gameObject.SetActive(true);
-        _panel.Find("PlayerNameText").GetComponent<UnityEngine.UI.Text>().text = Photon.Pun.PhotonNetwork.NickName;
-    }
+        _panel.Find("PlayerNameText").GetComponent<UnityEngine.UI.Text>().text = _playerNickName;
 
+
+    }
 
     public void OnLogInExitButtonClick()
     {
